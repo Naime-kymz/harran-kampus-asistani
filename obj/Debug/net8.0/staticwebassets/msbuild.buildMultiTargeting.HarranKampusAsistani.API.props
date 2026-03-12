@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\HarranKampusAsistani.API.props" />
-</Project>
