@@ -20,7 +20,57 @@
       --soft-pink:#fdf2f8;
       --ok:#16a34a;
       --bad:#dc2626;
+      --badge-border:#dbeafe;
+      --badge-text:#2563eb;
+      --badge-bg:#eff6ff;
+      --button-grad-1:#60a5fa;
+      --button-grad-2:#34d399;
+      --secondary-grad-1:#f59e0b;
+      --secondary-grad-2:#fb7185;
+      --header-shadow:0 8px 24px rgba(15,23,42,.05);
+      --card-shadow:0 8px 20px rgba(15,23,42,.05);
+      --card-hover-shadow:0 12px 28px rgba(15,23,42,.08);
+      --map-bg:#f1f5f9;
+      --item-bg:#f8fafc;
+      --item-border:#e2e8f0;
+      --input-bg:#fff;
+      --input-text:#0f172a;
+      --theme-btn-grad-1:#6366f1;
+      --theme-btn-grad-2:#8b5cf6;
     }
+
+    [data-theme="dark"]{
+      --bg:#0b1220;
+      --panel:#111827;
+      --card:#172033;
+      --text:#e5eefc;
+      --muted:#9fb0c9;
+      --border:#2b3a52;
+      --soft-blue:#12243f;
+      --soft-green:#0f2f28;
+      --soft-orange:#3b2414;
+      --soft-pink:#3a1830;
+      --ok:#22c55e;
+      --bad:#f87171;
+      --badge-border:#2a4365;
+      --badge-text:#93c5fd;
+      --badge-bg:#13233f;
+      --button-grad-1:#3b82f6;
+      --button-grad-2:#10b981;
+      --secondary-grad-1:#f59e0b;
+      --secondary-grad-2:#ec4899;
+      --header-shadow:0 8px 24px rgba(0,0,0,.25);
+      --card-shadow:0 8px 20px rgba(0,0,0,.25);
+      --card-hover-shadow:0 12px 28px rgba(0,0,0,.35);
+      --map-bg:#0f172a;
+      --item-bg:#0f172a;
+      --item-border:#334155;
+      --input-bg:#0f172a;
+      --input-text:#e5eefc;
+      --theme-btn-grad-1:#f59e0b;
+      --theme-btn-grad-2:#ef4444;
+    }
+
     *{box-sizing:border-box}
     body{
       margin:0;
@@ -31,10 +81,18 @@
     header{
       padding:20px 18px;
       border-bottom:1px solid var(--border);
-      background:#fff;
+      background:var(--panel);
       position:sticky;
       top:0;
       z-index:10;
+      box-shadow:var(--header-shadow);
+    }
+    .header-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
     }
     .header-title{
       display:flex;
@@ -52,10 +110,25 @@
       display:inline-flex;
       padding:5px 10px;
       border-radius:999px;
-      border:1px solid #dbeafe;
-      color:#2563eb;
-      background:#eff6ff;
+      border:1px solid var(--badge-border);
+      color:var(--badge-text);
+      background:var(--badge-bg);
       font-size:12px;
+    }
+    .theme-toggle{
+      border:none;
+      background:linear-gradient(135deg,var(--theme-btn-grad-1),var(--theme-btn-grad-2));
+      color:#fff;
+      padding:10px 14px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:13px;
+      box-shadow:0 6px 14px rgba(99,102,241,.22);
+      transition:.2s ease;
+    }
+    .theme-toggle:hover{
+      transform:translateY(-2px) scale(1.02);
     }
     .wrap{
       max-width:1250px;
@@ -73,7 +146,7 @@
       border:1px solid var(--border);
       border-radius:16px;
       overflow:hidden;
-      box-shadow:0 8px 24px rgba(15,23,42,.05);
+      box-shadow:var(--header-shadow);
     }
     .panel-head{
       padding:14px 16px;
@@ -81,7 +154,7 @@
       align-items:center;
       justify-content:space-between;
       border-bottom:1px solid var(--border);
-      background:#fff;
+      background:var(--panel);
     }
     .panel-head h2{
       margin:0;
@@ -107,7 +180,7 @@
       border:1px solid var(--border);
       border-radius:14px;
       padding:14px;
-      background:#fff;
+      background:var(--card);
       box-shadow:0 6px 18px rgba(15,23,42,.04);
     }
     .stat-title{
@@ -134,12 +207,12 @@
       border:1px solid var(--border);
       border-radius:14px;
       padding:16px;
-      box-shadow:0 8px 20px rgba(15,23,42,.05);
+      box-shadow:var(--card-shadow);
       transition:.2s ease;
     }
     .card:hover{
       transform:translateY(-2px);
-      box-shadow:0 12px 28px rgba(15,23,42,.08);
+      box-shadow:var(--card-hover-shadow);
     }
     .card::before{
       content:"";
@@ -156,6 +229,9 @@
       color:#2563eb;
       font-weight:700;
     }
+    [data-theme="dark"] .card h3{
+      color:#93c5fd;
+    }
     .row{
       display:flex;
       gap:8px;
@@ -170,8 +246,8 @@
       margin-top:10px;
     }
     .item{
-      border:1px solid #e2e8f0;
-      background:#f8fafc;
+      border:1px solid var(--item-border);
+      background:var(--item-bg);
       border-radius:12px;
       padding:12px;
     }
@@ -192,7 +268,7 @@
     }
     button{
       border:none;
-      background:linear-gradient(135deg,#60a5fa,#34d399);
+      background:linear-gradient(135deg,var(--button-grad-1),var(--button-grad-2));
       color:#fff;
       padding:10px 14px;
       border-radius:10px;
@@ -207,15 +283,15 @@
       box-shadow:0 10px 18px rgba(96,165,250,.22);
     }
     button.secondary{
-      background:linear-gradient(135deg,#f59e0b,#fb7185);
+      background:linear-gradient(135deg,var(--secondary-grad-1),var(--secondary-grad-2));
     }
     input, textarea, select{
       width:100%;
       padding:10px 12px;
       border-radius:10px;
-      border:1px solid #e2e8f0;
-      background:#fff;
-      color:#0f172a;
+      border:1px solid var(--border);
+      background:var(--input-bg);
+      color:var(--input-text);
       outline:none;
       font:inherit;
     }
@@ -241,8 +317,8 @@
       height:440px;
       border-radius:14px;
       overflow:hidden;
-      border:1px solid #e2e8f0;
-      background:#f1f5f9;
+      border:1px solid var(--border);
+      background:var(--map-bg);
     }
     .place-list{
       margin-top:12px;
@@ -263,6 +339,9 @@
       color:#2563eb;
       text-decoration:none;
     }
+    [data-theme="dark"] a{
+      color:#93c5fd;
+    }
     a:hover{
       text-decoration:underline;
     }
@@ -270,12 +349,20 @@
 </head>
 <body>
   <header>
-    <div class="header-title">
-      🎓 Harran Kampüs Asistanı
-      <span class="badge">Demo</span>
-    </div>
-    <div class="header-sub">
-      Duyurular, etkinlikler, ring saatleri, yemekhane menüsü ve kampüs haritası tek ekranda
+    <div class="header-top">
+      <div>
+        <div class="header-title">
+          🎓 Harran Kampüs Asistanı
+          <span class="badge">Demo</span>
+        </div>
+        <div class="header-sub">
+          Duyurular, etkinlikler, ring saatleri, yemekhane menüsü ve kampüs haritası tek ekranda
+        </div>
+      </div>
+
+      <button type="button" class="theme-toggle" onclick="toggleTheme()" id="themeToggleButton">
+        🌙 Koyu Tema
+      </button>
     </div>
   </header>
 
@@ -351,9 +438,9 @@
             </div>
 
             <div class="card">
-               <h3>⏳ Sonraki Ring</h3>
-               <div id="nextRingBox" class="list"></div>
-             </div>
+              <h3>⏳ Sonraki Ring</h3>
+              <div id="nextRingBox" class="list"></div>
+            </div>
 
             <div class="card">
               <h3>⭐ Haftalık Yemekhane Değerlendirmesi</h3>
@@ -419,36 +506,36 @@
           </div>
         </div>
 
-    <div class="card" style="margin-top:12px;">
-  <h3>➕ Etkinlik Ekle</h3>
-  <div class="form">
-    <input id="eventTitle" placeholder="Başlık" />
-    <input id="eventDescription" placeholder="Açıklama" />
+        <div class="card" style="margin-top:12px;">
+          <h3>➕ Etkinlik Ekle</h3>
+          <div class="form">
+            <input id="eventTitle" placeholder="Başlık" />
+            <input id="eventDescription" placeholder="Açıklama" />
 
-    <select id="eventLocation">
-      <option value="">Konum seç</option>
-      <option value="İktisadi ve İdari Bilimler Fakültesi">İktisadi ve İdari Bilimler Fakültesi</option>
-      <option value="Mühendislik Fakültesi">Mühendislik Fakültesi</option>
-      <option value="Ziraat Fakültesi">Ziraat Fakültesi</option>
-      <option value="Eğitim Fakültesi">Eğitim Fakültesi</option>
-      <option value="Fen-Edebiyat Fakültesi">Fen-Edebiyat Fakültesi</option>
-      <option value="Tıp Fakültesi">Tıp Fakültesi</option>
-      <option value="Harran Üniversitesi Hastanesi">Harran Üniversitesi Hastanesi</option>
-      <option value="Yüzme Havuzu">Yüzme Havuzu</option>
-      <option value="Merkezi Kafeterya, Öğrenci İşleri">Merkezi Kafeterya, Öğrenci İşleri</option>
-      <option value="Rektörlük Binası">Rektörlük Binası</option>
-      <option value="Merkezi Derslik">Merkezi Derslik</option>
-      <option value="Merkezi Kütüphane (El-Battani)">Merkezi Kütüphane (El-Battani)</option>
-      <option value="Kampüs Camii">Kampüs Camii</option>
-    </select>
+            <select id="eventLocation">
+              <option value="">Konum seç</option>
+              <option value="İktisadi ve İdari Bilimler Fakültesi">İktisadi ve İdari Bilimler Fakültesi</option>
+              <option value="Mühendislik Fakültesi">Mühendislik Fakültesi</option>
+              <option value="Ziraat Fakültesi">Ziraat Fakültesi</option>
+              <option value="Eğitim Fakültesi">Eğitim Fakültesi</option>
+              <option value="Fen-Edebiyat Fakültesi">Fen-Edebiyat Fakültesi</option>
+              <option value="Tıp Fakültesi">Tıp Fakültesi</option>
+              <option value="Harran Üniversitesi Hastanesi">Harran Üniversitesi Hastanesi</option>
+              <option value="Yüzme Havuzu">Yüzme Havuzu</option>
+              <option value="Merkezi Kafeterya, Öğrenci İşleri">Merkezi Kafeterya, Öğrenci İşleri</option>
+              <option value="Rektörlük Binası">Rektörlük Binası</option>
+              <option value="Merkezi Derslik">Merkezi Derslik</option>
+              <option value="Merkezi Kütüphane (El-Battani)">Merkezi Kütüphane (El-Battani)</option>
+              <option value="Kampüs Camii">Kampüs Camii</option>
+            </select>
 
-    <input id="eventStart" type="datetime-local" />
-    <input id="eventEnd" type="datetime-local" />
-    <input id="eventUrl" placeholder="Kaynak URL (opsiyonel)" />
+            <input id="eventStart" type="datetime-local" />
+            <input id="eventEnd" type="datetime-local" />
+            <input id="eventUrl" placeholder="Kaynak URL (opsiyonel)" />
 
-    <button type="button" id="eventSaveButton">Kaydet</button>
-  </div>
-</div>
+            <button type="button" id="eventSaveButton">Kaydet</button>
+          </div>
+        </div>
       </div>
     </aside>
   </div>
@@ -492,6 +579,21 @@
 
     let map;
     let markersLayer;
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+
+      const btn = document.getElementById("themeToggleButton");
+      if (btn) {
+        btn.textContent = theme === "dark" ? "☀️ Açık Tema" : "🌙 Koyu Tema";
+      }
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute("data-theme") || "light";
+      applyTheme(current === "dark" ? "light" : "dark");
+    }
 
     function escapeHtml(value) {
       return String(value ?? "")
@@ -582,40 +684,40 @@
     }
 
     function renderEventCalendar(items) {
-  const box = document.getElementById("eventCalendarList");
-  box.innerHTML = "";
+      const box = document.getElementById("eventCalendarList");
+      box.innerHTML = "";
 
-  if (!items || items.length === 0) {
-    box.innerHTML = "";
-    return;
-  }
+      if (!items || items.length === 0) {
+        box.innerHTML = "";
+        return;
+      }
 
-  const grouped = {};
+      const grouped = {};
 
-  for (const item of items) {
-    const d = new Date(item.startAt);
-    const key = d.getFullYear() + "-" +
-      String(d.getMonth() + 1).padStart(2, "0") + "-" +
-      String(d.getDate()).padStart(2, "0");
+      for (const item of items) {
+        const d = new Date(item.startAt);
+        const key = d.getFullYear() + "-" +
+          String(d.getMonth() + 1).padStart(2, "0") + "-" +
+          String(d.getDate()).padStart(2, "0");
 
-    if (!grouped[key]) grouped[key] = [];
-    grouped[key].push(item);
-  }
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(item);
+      }
 
-  const keys = Object.keys(grouped).sort();
+      const keys = Object.keys(grouped).sort();
 
-  for (const key of keys) {
-    const [year, month, day] = key.split("-");
-    box.innerHTML += `
-      <div class="item">
-        <div class="item-title">${day}.${month}.${year}</div>
-        ${grouped[key].map(item => `
-          <div class="item-text">${fmtDate(item.startAt)} - ${escapeHtml(item.title || "")}</div>
-        `).join("")}
-      </div>
-    `;
-  }
-}
+      for (const key of keys) {
+        const [year, month, day] = key.split("-");
+        box.innerHTML += `
+          <div class="item">
+            <div class="item-title">${day}.${month}.${year}</div>
+            ${grouped[key].map(item => `
+              <div class="item-text">${fmtDate(item.startAt)} - ${escapeHtml(item.title || "")}</div>
+            `).join("")}
+          </div>
+        `;
+      }
+    }
 
     function renderRing(items) {
       const box = document.getElementById("ringList");
@@ -635,60 +737,60 @@
     }
 
     function renderNextRing(items) {
-  const box = document.getElementById("nextRingBox");
-  box.innerHTML = "";
+      const box = document.getElementById("nextRingBox");
+      box.innerHTML = "";
 
-  if (!items || items.length === 0) {
-    box.innerHTML = `<div class="item"><div class="item-text">Kayıt yok.</div></div>`;
-    return;
-  }
+      if (!items || items.length === 0) {
+        box.innerHTML = `<div class="item"><div class="item-text">Kayıt yok.</div></div>`;
+        return;
+      }
 
-  const now = new Date();
-  let nextItem = null;
-  let minDiff = Number.MAX_SAFE_INTEGER;
+      const now = new Date();
+      let nextItem = null;
+      let minDiff = Number.MAX_SAFE_INTEGER;
 
-  for (const item of items) {
-    const parts = (item.saat || "").split(":");
-    if (parts.length !== 2) continue;
+      for (const item of items) {
+        const parts = (item.saat || "").split(":");
+        if (parts.length !== 2) continue;
 
-    const ringTime = new Date();
-    ringTime.setHours(Number(parts[0]), Number(parts[1]), 0, 0);
+        const ringTime = new Date();
+        ringTime.setHours(Number(parts[0]), Number(parts[1]), 0, 0);
 
-    let diff = ringTime - now;
-    if (diff < 0) {
-      diff += 24 * 60 * 60 * 1000;
+        let diff = ringTime - now;
+        if (diff < 0) {
+          diff += 24 * 60 * 60 * 1000;
+        }
+
+        if (diff < minDiff) {
+          minDiff = diff;
+          nextItem = item;
+        }
+      }
+
+      if (!nextItem) {
+        box.innerHTML = `<div class="item"><div class="item-text">Uygun ring bulunamadı.</div></div>`;
+        return;
+      }
+
+      const totalMinutes = Math.floor(minDiff / 60000);
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+
+      let remainText = "";
+      if (hours > 0) {
+        remainText = `${hours} saat ${minutes} dakika`;
+      } else {
+        remainText = `${minutes} dakika`;
+      }
+
+      box.innerHTML = `
+        <div class="item">
+          <div class="item-title">${escapeHtml(nextItem.hat || "")} - ${escapeHtml(nextItem.saat || "")}</div>
+          <div class="item-text">${escapeHtml(nextItem.guzergah || "")}</div>
+          <div class="item-text">Kalan süre: ${remainText}</div>
+        </div>
+      `;
     }
-
-    if (diff < minDiff) {
-      minDiff = diff;
-      nextItem = item;
-    }
-  }
-
-  if (!nextItem) {
-    box.innerHTML = `<div class="item"><div class="item-text">Uygun ring bulunamadı.</div></div>`;
-    return;
-  }
-
-  const totalMinutes = Math.floor(minDiff / 60000);
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
-
-  let remainText = "";
-  if (hours > 0) {
-    remainText = `${hours} saat ${minutes} dakika`;
-  } else {
-    remainText = `${minutes} dakika`;
-  }
-
-  box.innerHTML = `
-    <div class="item">
-      <div class="item-title">${escapeHtml(nextItem.hat || "")} - ${escapeHtml(nextItem.saat || "")}</div>
-      <div class="item-text">${escapeHtml(nextItem.guzergah || "")}</div>
-      <div class="item-text">Kalan süre: ${remainText}</div>
-    </div>
-  `;
-}
 
     function renderMenu(items) {
       const box = document.getElementById("menuList");
@@ -754,21 +856,21 @@
     }
 
     async function loadEvents() {
-  const response = await fetch(API.events);
-  const data = await response.json();
-  renderEvents(data);
-  renderEventCalendar(data);
-  drawMarkers(data);
-  return data;
-}
+      const response = await fetch(API.events);
+      const data = await response.json();
+      renderEvents(data);
+      renderEventCalendar(data);
+      drawMarkers(data);
+      return data;
+    }
 
     async function loadRing() {
-  const response = await fetch(API.ring);
-  const data = await response.json();
-  renderRing(data);
-  renderNextRing(data);
-  return data;
-}
+      const response = await fetch(API.ring);
+      const data = await response.json();
+      renderRing(data);
+      renderNextRing(data);
+      return data;
+    }
 
     async function loadMenu() {
       const response = await fetch(API.menu);
@@ -828,57 +930,57 @@
       await loadAll();
     }
 
-   async function createEvent() {
-  const title = document.getElementById("eventTitle").value.trim();
-  const description = document.getElementById("eventDescription").value.trim();
-  const location = document.getElementById("eventLocation").value.trim();
-  const startRaw = document.getElementById("eventStart").value;
-  const endRaw = document.getElementById("eventEnd").value;
-  const sourceUrl = document.getElementById("eventUrl").value.trim();
+    async function createEvent() {
+      const title = document.getElementById("eventTitle").value.trim();
+      const description = document.getElementById("eventDescription").value.trim();
+      const location = document.getElementById("eventLocation").value.trim();
+      const startRaw = document.getElementById("eventStart").value;
+      const endRaw = document.getElementById("eventEnd").value;
+      const sourceUrl = document.getElementById("eventUrl").value.trim();
 
-  if (!title) {
-    alert("Başlık zorunludur");
-    return;
-  }
+      if (!title) {
+        alert("Başlık zorunludur");
+        return;
+      }
 
-  if (!startRaw) {
-    alert("Başlangıç zamanı zorunludur");
-    return;
-  }
+      if (!startRaw) {
+        alert("Başlangıç zamanı zorunludur");
+        return;
+      }
 
-  const payload = {
-    title: title,
-    description: description || null,
-    location: location || null,
-    startAt: new Date(startRaw).toISOString(),
-    endAt: endRaw ? new Date(endRaw).toISOString() : null,
-    sourceUrl: sourceUrl || null
-  };
+      const payload = {
+        title: title,
+        description: description || null,
+        location: location || null,
+        startAt: new Date(startRaw).toISOString(),
+        endAt: endRaw ? new Date(endRaw).toISOString() : null,
+        sourceUrl: sourceUrl || null
+      };
 
-  const response = await fetch("/api/Events", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
+      const response = await fetch("/api/Events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
 
-  if (!response.ok) {
-    const text = await response.text();
-    alert(text);
-    return;
-  }
+      if (!response.ok) {
+        const text = await response.text();
+        alert(text);
+        return;
+      }
 
-  document.getElementById("eventTitle").value = "";
-  document.getElementById("eventDescription").value = "";
-  document.getElementById("eventLocation").value = "";
-  document.getElementById("eventStart").value = "";
-  document.getElementById("eventEnd").value = "";
-  document.getElementById("eventUrl").value = "";
+      document.getElementById("eventTitle").value = "";
+      document.getElementById("eventDescription").value = "";
+      document.getElementById("eventLocation").value = "";
+      document.getElementById("eventStart").value = "";
+      document.getElementById("eventEnd").value = "";
+      document.getElementById("eventUrl").value = "";
 
-  await loadAll();
-  alert("Etkinlik eklendi");
-}
+      await loadAll();
+      alert("Etkinlik eklendi");
+    }
 
     async function sendFeedback() {
       const rating = document.getElementById("feedbackRating").value;
@@ -1052,6 +1154,9 @@
         }
       );
     }
+
+    const savedTheme = localStorage.getItem("theme") || "light";
+    applyTheme(savedTheme);
 
     initMap();
     loadAll();
