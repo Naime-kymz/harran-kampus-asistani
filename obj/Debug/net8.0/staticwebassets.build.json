@@ -1,0 +1,39 @@
+{
+  "Version": 1,
+  "Hash": "kfyNPqwSSniVj3mLQXvfE7BhcZUAy6sf6mnVDQoDKMA=",
+  "Source": "HarranKampusAsistani.API",
+  "BasePath": "_content/HarranKampusAsistani.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "HarranKampusAsistani.API\\wwwroot",
+      "Source": "HarranKampusAsistani.API",
+      "ContentRoot": "C:\\Users\\naime\\HarranKampusAsistani\\HarranKampusAsistani.API\\wwwroot\\",
+      "BasePath": "_content/HarranKampusAsistani.API",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\naime\\HarranKampusAsistani\\HarranKampusAsistani.API\\wwwroot\\index.html",
+      "SourceId": "HarranKampusAsistani.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\naime\\HarranKampusAsistani\\HarranKampusAsistani.API\\wwwroot\\",
+      "BasePath": "_content/HarranKampusAsistani.API",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    }
+  ]
+}

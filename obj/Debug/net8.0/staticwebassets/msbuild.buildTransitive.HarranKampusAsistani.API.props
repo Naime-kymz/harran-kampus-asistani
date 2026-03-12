@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\HarranKampusAsistani.API.props" />
+</Project>

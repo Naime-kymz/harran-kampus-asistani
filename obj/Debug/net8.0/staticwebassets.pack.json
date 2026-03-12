@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\naime\\HarranKampusAsistani\\HarranKampusAsistani.API\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.HarranKampusAsistani.API.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.HarranKampusAsistani.API.props",
+      "PackagePath": "build\\HarranKampusAsistani.API.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.HarranKampusAsistani.API.props",
+      "PackagePath": "buildMultiTargeting\\HarranKampusAsistani.API.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.HarranKampusAsistani.API.props",
+      "PackagePath": "buildTransitive\\HarranKampusAsistani.API.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
