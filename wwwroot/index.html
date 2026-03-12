@@ -345,6 +345,26 @@
     a:hover{
       text-decoration:underline;
     }
+
+    .theme-toggle{
+      border:none;
+     background:linear-gradient(135deg,#6366f1,#8b5cf6);
+     color:#fff;
+     padding:10px 14px;
+     border-radius:10px;
+     cursor:pointer;
+     font-weight:700;
+     font-size:13px;
+     box-shadow:0 6px 14px rgba(99,102,241,.22);
+   }
+
+     .header-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+     flex-wrap:wrap;
+   }
   </style>
 </head>
 <body>
@@ -1154,6 +1174,21 @@
         }
       );
     }
+
+    function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("theme", theme);
+
+  const btn = document.getElementById("themeToggleButton");
+  if (btn) {
+    btn.textContent = theme === "dark" ? "☀️ Açık Tema" : "🌙 Koyu Tema";
+  }
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute("data-theme") || "light";
+  applyTheme(current === "dark" ? "light" : "dark");
+}
 
     const savedTheme = localStorage.getItem("theme") || "light";
     applyTheme(savedTheme);
