@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Harran Kampüs Asistanı</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    :root{
+      --bg:#0f172a;
+      --panel:#111c33;
+      --card:#0b1224;
+      --text:#e5e7eb;
+      --muted:#9ca3af;
+      --border:rgba(255,255,255,.08);
+      --accent:#38bdf8;
+      --ok:#22c55e;
+      --bad:#ef4444;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:linear-gradient(180deg,#071023 0%, #0b1224 40%, #070f20 100%);
+      color:var(--text);
+    }
+
+    header{
+      padding:18px 16px;
+      border-bottom:1px solid var(--border);
+      background:rgba(10,18,36,.7);
+      backdrop-filter:blur(10px);
+      position:sticky;
+      top:0;
+      z-index:10;
+    }
+
+    .header-title{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:24px;
+      font-weight:700;
+    }
+
+    .header-sub{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .badge{
+      display:inline-flex;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .wrap{
+      max-width:1200px;
+      margin:0 auto;
+      padding:16px;
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:14px;
+    }
+
+    @media (max-width: 980px){
+      .wrap{ grid-template-columns:1fr; }
+    }
+
+    .panel{
+      background:rgba(17,28,51,.68);
+      border:1px solid var(--border);
+      border-radius:14px;
+      overflow:hidden;
+    }
+
+    .panel-head{
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid var(--border);
+    }
+
+    .panel-head h2{
+      margin:0;
+      font-size:15px;
+      font-weight:700;
+    }
+
+    .panel-body{
+      padding:12px 14px;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    @media (max-width: 700px){
+      .grid2{ grid-template-columns:1fr; }
+    }
+
+    .card{
+      background:rgba(11,18,36,.88);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px;
+    }
+
+    .card h3{
+      margin:0 0 8px 0;
+      font-size:14px;
+    }
+
+    .row{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .item{
+      border:1px solid var(--border);
+      background:rgba(8,14,30,.8);
+      border-radius:12px;
+      padding:10px;
+    }
+
+    .item-title{
+      font-weight:800;
+      margin-bottom:4px;
+    }
+
+    .item-text{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.35;
+      white-space:pre-wrap;
+    }
+
+    .hint{
+      color:var(--muted);
+      font-size:12px;
+      margin-top:6px;
+    }
+
+    button{
+      border:1px solid var(--border);
+      background:rgba(11,18,36,.95);
+      color:var(--text);
+      padding:8px 10px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:13px;
+    }
+
+    button:hover{
+      border-color:rgba(56,189,248,.35);
+    }
+
+    input, textarea{
+      width:100%;
+      padding:10px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:rgba(8,14,30,.8);
+      color:var(--text);
+      outline:none;
+    }
+
+    textarea{
+      min-height:84px;
+      resize:vertical;
+    }
+
+    .form{
+      display:grid;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .map-box{
+      height:420px;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid var(--border);
+    }
+
+    .place-list{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+
+    @media (max-width: 700px){
+      .place-list{ grid-template-columns:1fr; }
+    }
+
+    .place-button{
+      width:100%;
+      text-align:left;
+    }
+
+    .status-ok{ color:var(--ok); font-weight:700; }
+    .status-bad{ color:var(--bad); font-weight:700; }
+
+    a{
+      color:var(--accent);
+      text-decoration:none;
+    }
+
+    a:hover{
+      text-decoration:underline;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-title">
+      Harran Kampüs Asistanı
+      <span class="badge">Demo</span>
+    </div>
+    <div class="header-sub">
+      Duyurular, etkinlikler, ring saatleri, yemekhane menüsü ve kampüs haritası
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Genel Görünüm</h2>
+        <div class="row">
+          <button onclick="loadAll()">Yenile</button>
+          <span id="status"></span>
+        </div>
+      </div>
+
+      <div class="panel-body">
+        <div class="grid2">
+
+          <div class="card">
+            <h3>Duyurular</h3>
+            <div class="row">
+              <button onclick="loadAnnouncements()">Yükle</button>
+              <span class="badge">GET /api/Announcements</span>
+            </div>
+            <div class="hint">Duyurular herkese açık olarak görüntülenebilir.</div>
+            <div id="announcementsList" class="list"></div>
+          </div>
+
+          <div class="card">
+            <h3>Etkinlikler</h3>
+            <div class="row">
+              <button onclick="loadEvents()">Yükle</button>
+              <span class="badge">GET /api/Events</span>
+            </div>
+            <div class="hint">Etkinlikler listelenir ve haritada gösterilir.</div>
+            <div id="eventsList" class="list"></div>
+          </div>
+
+          <div class="card">
+            <h3>Ring Saatleri</h3>
+            <div class="row">
+              <button onclick="loadRing()">Yükle</button>
+              <span class="badge">GET /api/RingSaatleri</span>
+            </div>
+            <div id="ringList" class="list"></div>
+          </div>
+
+          <div class="card">
+            <h3>Yemekhane Menüsü</h3>
+            <div class="row">
+              <button onclick="loadMenu()">Yükle</button>
+              <span class="badge">GET /api/YemekhaneMenu</span>
+            </div>
+            <div id="menuList" class="list"></div>
+          </div>
+
+        </div>
+
+        <div class="card" style="margin-top:12px;">
+          <h3>Osmanbey Yerleşkesi Haritası</h3>
+          <div class="hint">
+            Kampüs noktaları ve etkinlikler harita üzerinde gösterilir.
+          </div>
+
+          <div class="map-box" id="map"></div>
+
+          <div class="place-list" id="placeList"></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div class="panel-head">
+        <h2>Yönetici İşlemleri</h2>
+        <span class="badge">POST işlemleri</span>
+      </div>
+
+      <div class="panel-body">
+        <div class="card">
+          <h3>API Key</h3>
+          <input id="apiKey" placeholder="ör: naime466-admin" />
+          <div class="hint">Yazma işlemleri için API anahtarı gereklidir.</div>
+        </div>
+
+        <div class="card" style="margin-top:12px;">
+          <h3>Duyuru Ekle</h3>
+          <div class="form">
+            <input id="announcementTitle" placeholder="Başlık" />
+            <textarea id="announcementContent" placeholder="İçerik"></textarea>
+            <input id="announcementUrl" placeholder="Kaynak URL (opsiyonel)" />
+            <button onclick="createAnnouncement()">Kaydet</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px;">
+          <h3>Etkinlik Ekle</h3>
+          <div class="form">
+            <input id="eventTitle" placeholder="Başlık" />
+            <input id="eventDescription" placeholder="Açıklama" />
+            <input id="eventLocation" placeholder="Konum (örn: Mühendislik Fakültesi)" />
+            <input id="eventStart" placeholder="Başlangıç (örn: 2026-03-05T10:00:00Z)" />
+            <input id="eventEnd" placeholder="Bitiş (örn: 2026-03-05T12:00:00Z)" />
+            <input id="eventUrl" placeholder="Kaynak URL (opsiyonel)" />
+            <button onclick="createEvent()">Kaydet</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <script>
+    const API = {
+      announcements: "/api/Announcements",
+      events: "/api/Events",
+      ring: "/api/RingSaatleri",
+      menu: "/api/YemekhaneMenu"
+    };
+
+    const campusCenter = [37.169794087791004, 38.99938479061838];
+
+    const campusPlaces = [
+      { name: "İktisadi ve İdari Bilimler Fakültesi", lat: 37.17385050660283, lng: 39.002274870772226 },
+      { name: "Mühendislik Fakültesi", lat: 37.17289303512423, lng: 39.00331556782255 },
+      { name: "Ziraat Fakültesi", lat: 37.17062486922468, lng: 39.00215148915216 },
+      { name: "Eğitim Fakültesi", lat: 37.16827381275161, lng: 39.00121808045754 },
+      { name: "Fen-Edebiyat Fakültesi", lat: 37.169376681078134, lng: 39.001046419088404 },
+      { name: "Tıp Fakültesi", lat: 37.16845335052305, lng: 38.99445891385892 },
+      { name: "Harran Üniversitesi Hastanesi", lat: 37.168957763981886, lng: 38.991079330505066 },
+      { name: "Yüzme Havuzu", lat: 37.165922683041586, lng: 38.99953365329018 },
+      { name: "Merkezi Kafeterya, Öğrenci İşleri", lat: 37.169610336740455, lng: 39.00036903703088 },
+      { name: "Rektörlük Binası", lat: 37.16855401245206, lng: 38.995360397088426 },
+      { name: "Merkezi Derslik", lat: 37.1684241930166, lng: 38.99919902883558 },
+      { name: "Merkezi Kütüphane (El-Battani)", lat: 37.16986238685956, lng: 38.99605545981679 },
+      { name: "Kampüs Camii", lat: 37.17632158229431, lng: 38.99434018650671 }
+    ];
+
+    let map;
+    let markersLayer;
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function formatDate(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (isNaN(date.getTime())) return value;
+      return date.toLocaleString("tr-TR");
+    }
+
+    function setStatus(text, ok = true) {
+      const status = document.getElementById("status");
+      status.textContent = text || "";
+      status.className = ok ? "status-ok" : "status-bad";
+    }
+
+    function safeLink(url) {
+      if (!url) return "";
+      try {
+        const parsed = new URL(url);
+        return `<a href="${parsed.href}" target="_blank" rel="noopener">Kaynak</a>`;
+      } catch {
+        return "";
+      }
+    }
+
+    function renderAnnouncements(items) {
+      const box = document.getElementById("announcementsList");
+      box.innerHTML = "";
+
+      if (!items || items.length === 0) {
+        box.innerHTML = `<div class="item"><div class="item-text">Kayıt yok.</div></div>`;
+        return;
+      }
+
+      for (const item of items) {
+        box.innerHTML += `
+          <div class="item">
+            <div class="item-title">${escapeHtml(item.title)}</div>
+            <div class="item-text">${escapeHtml(item.content)}</div>
+            <div class="row">
+              <span class="badge">#${item.id}</span>
+              <span class="badge">${formatDate(item.publishedAt || item.createdAt)}</span>
+              ${safeLink(item.sourceUrl)}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function renderEvents(items) {
+      const box = document.getElementById("eventsList");
+      box.innerHTML = "";
+
+      if (!items || items.length === 0) {
+        box.innerHTML = `<div class="item"><div class="item-text">Kayıt yok.</div></div>`;
+        return;
+      }
+
+      for (const item of items) {
+        box.innerHTML += `
+          <div class="item">
+            <div class="item-title">${escapeHtml(item.title)}</div>
+            <div class="item-text">${escapeHtml(item.description || "")}</div>
+            <div class="row">
+              <span class="badge">#${item.id}</span>
+              <span class="badge">${formatDate(item.startAt)} → ${formatDate(item.endAt)}</span>
+              ${safeLink(item.sourceUrl)}
+            </div>
+            ${item.location ? `<div class="hint">Konum: ${escapeHtml(item.location)}</div>` : ""}
+          </div>
+        `;
+      }
+    }
+
+    function renderRing(items) {
+      const box = document.getElementById("ringList");
+      box.innerHTML = "";
+
+      if (!items || items.length === 0) {
+        box.innerHTML = `<div class="item"><div class="item-text">Kayıt yok.</div></div>`;
+        return;
+      }
+
+      for (const item of items) {
+        box.innerHTML += `
+          <div class="item">
+            <div class="item-title">${escapeHtml(item.hat || "")} - ${escapeHtml(item.saat || "")}</div>
+            <div class="item-text">${escapeHtml(item.guzergah || "")}</div>
+          </div>
+        `;
+      }
+    }
+
+    function renderMenu(items) {
+      const box = document.getElementById("menuList");
+      box.innerHTML = "";
+
+      if (!items || items.length === 0) {
+        box.innerHTML = `<div class="item"><div class="item-text">Kayıt yok.</div></div>`;
+        return;
+      }
+
+      for (const item of items) {
+        box.innerHTML += `
+          <div class="item">
+            <div class="item-title">${escapeHtml(item.tarih)}</div>
+            <div class="item-text">Çorba: ${escapeHtml(item.corba)}</div>
+            <div class="item-text">Ana yemek: ${escapeHtml(item.anaYemek)}</div>
+            <div class="item-text">Yardımcı yemek: ${escapeHtml(item.yardimciYemek)}</div>
+            <div class="item-text">Tatlı: ${escapeHtml(item.tatli)}</div>
+          </div>
+        `;
+      }
+    }
+
+    async function loadAnnouncements() {
+      const response = await fetch(API.announcements);
+      const data = await response.json();
+      renderAnnouncements(data);
+    }
+
+    async function loadEvents() {
+      const response = await fetch(API.events);
+      const data = await response.json();
+      renderEvents(data);
+      drawMarkers(data);
+    }
+
+    async function loadRing() {
+      const response = await fetch(API.ring);
+      const data = await response.json();
+      renderRing(data);
+    }
+
+    async function loadMenu() {
+      const response = await fetch(API.menu);
+      const data = await response.json();
+      renderMenu(data);
+    }
+
+    async function loadAll() {
+      setStatus("Yükleniyor...");
+      try {
+        await loadAnnouncements();
+        await loadEvents();
+        await loadRing();
+        await loadMenu();
+        setStatus("Hazır");
+      } catch (error) {
+        console.error(error);
+        setStatus("Hata oluştu", false);
+      }
+    }
+
+    function getApiKey() {
+      return (document.getElementById("apiKey").value || "").trim();
+    }
+
+    async function createAnnouncement() {
+      const payload = {
+        title: (document.getElementById("announcementTitle").value || "").trim(),
+        content: (document.getElementById("announcementContent").value || "").trim(),
+        sourceUrl: (document.getElementById("announcementUrl").value || "").trim() || null,
+        publishedAt: new Date().toISOString()
+      };
+
+      const response = await fetch(API.announcements, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": getApiKey()
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        setStatus("Duyuru eklenemedi", false);
+        alert(text);
+        return;
+      }
+
+      setStatus("Duyuru eklendi");
+      document.getElementById("announcementTitle").value = "";
+      document.getElementById("announcementContent").value = "";
+      document.getElementById("announcementUrl").value = "";
+      await loadAnnouncements();
+    }
+
+    async function createEvent() {
+      const payload = {
+        title: (document.getElementById("eventTitle").value || "").trim(),
+        description: (document.getElementById("eventDescription").value || "").trim() || null,
+        location: (document.getElementById("eventLocation").value || "").trim() || null,
+        startAt: (document.getElementById("eventStart").value || "").trim(),
+        endAt: (document.getElementById("eventEnd").value || "").trim(),
+        sourceUrl: (document.getElementById("eventUrl").value || "").trim() || null
+      };
+
+      const response = await fetch(API.events, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": getApiKey()
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        setStatus("Etkinlik eklenemedi", false);
+        alert(text);
+        return;
+      }
+
+      setStatus("Etkinlik eklendi");
+      document.getElementById("eventTitle").value = "";
+      document.getElementById("eventDescription").value = "";
+      document.getElementById("eventLocation").value = "";
+      document.getElementById("eventStart").value = "";
+      document.getElementById("eventEnd").value = "";
+      document.getElementById("eventUrl").value = "";
+      await loadEvents();
+    }
+
+    function initMap() {
+      map = L.map("map").setView(campusCenter, 15);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap"
+      }).addTo(map);
+
+      markersLayer = L.layerGroup().addTo(map);
+
+      renderPlaceButtons();
+      drawMarkers([]);
+    }
+
+    function renderPlaceButtons() {
+      const box = document.getElementById("placeList");
+      box.innerHTML = "";
+
+      for (const place of campusPlaces) {
+        box.innerHTML += `
+          <button class="place-button" onclick="focusPlace(${place.lat}, ${place.lng})">
+            ${escapeHtml(place.name)}
+          </button>
+        `;
+      }
+    }
+
+    function focusPlace(lat, lng) {
+      map.setView([lat, lng], 17);
+    }
+
+    function drawMarkers(events) {
+      markersLayer.clearLayers();
+
+      for (const place of campusPlaces) {
+        L.marker([place.lat, place.lng])
+          .addTo(markersLayer)
+          .bindPopup(`<b>${escapeHtml(place.name)}</b>`);
+      }
+
+      if (!events || events.length === 0) return;
+
+      for (const event of events) {
+        let matchedPlace = null;
+        const eventLocation = (event.location || "").toLowerCase();
+
+        for (const place of campusPlaces) {
+          const placeName = (place.name || "").toLowerCase();
+
+          if (
+            eventLocation.includes(placeName) ||
+            placeName.includes(eventLocation)
+          ) {
+            matchedPlace = place;
+            break;
+          }
+        }
+
+        const lat = matchedPlace ? matchedPlace.lat : campusCenter[0];
+        const lng = matchedPlace ? matchedPlace.lng : campusCenter[1];
+
+        L.circleMarker([lat, lng], {
+          radius: 8,
+          color: "#22c55e",
+          fillColor: "#22c55e",
+          fillOpacity: 0.9
+        })
+          .addTo(markersLayer)
+          .bindPopup(`
+            <b>${escapeHtml(event.title || "Etkinlik")}</b><br>
+            ${escapeHtml(event.description || "")}<br>
+            <small>${escapeHtml(event.location || "Konum belirtilmedi")}</small>
+          `);
+      }
+    }
+
+    initMap();
+    loadAll();
+  </script>
+</body>
+</html>
