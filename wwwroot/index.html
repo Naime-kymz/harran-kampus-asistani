@@ -384,9 +384,9 @@
       <button type="button" class="theme-toggle" onclick="toggleTheme()" id="themeToggleButton">
         🌙 Koyu Tema
       </button>
-      <button onclick="enableNotifications()" class="theme-toggle">
+      <button type="button" class="theme-toggle" onclick="enableNotifications()" id="notificationButton">
         🔔 Bildirimleri Aç
-      </button>
+     </button>
     </div>
   </header>
 
@@ -614,26 +614,6 @@
       }
     }
 
-    function enableNotifications(){
-
-  if(!("Notification" in window)){
-    alert("Tarayıcı bildirim desteklemiyor")
-    return
-  }
-
-  Notification.requestPermission().then(permission => {
-
-    if(permission === "granted"){
-
-      new Notification("Harran Kampüs Asistanı",{
-        body:"Bildirimler aktif edildi"
-      })
-
-    }
-
-  })
-
-}
 
     function toggleTheme() {
       const current = document.documentElement.getAttribute("data-theme") || "light";
@@ -1208,6 +1188,46 @@
   if (btn) {
     btn.textContent = theme === "dark" ? "☀️ Açık Tema" : "🌙 Koyu Tema";
   }
+}
+
+function enableNotifications() {
+  if (!("Notification" in window)) {
+    alert("Bu tarayıcı bildirim desteklemiyor.");
+    return;
+  }
+
+  Notification.requestPermission().then(permission => {
+    if (permission === "granted") {
+      const btn = document.getElementById("notificationButton");
+      if (btn) {
+        btn.textContent = "🔔 Bildirimler Açık";
+      }
+
+      new Notification("Harran Kampüs Asistanı", {
+        body: "Bildirimler aktif edildi."
+      });
+    } else {
+      alert("Bildirim izni verilmedi.");
+    }
+  });
+}
+  function testNotification(){
+
+  if(Notification.permission === "granted"){
+
+    new Notification("Yeni duyuru",{
+      body:"Yemekhane menüsü güncellendi"
+    })
+
+  }
+
+}
+
+function showNotification(title, body) {
+  if (!("Notification" in window)) return;
+  if (Notification.permission !== "granted") return;
+
+  new Notification(title, { body });
 }
 
 function toggleTheme() {
